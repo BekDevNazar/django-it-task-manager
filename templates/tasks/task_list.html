@@ -1,0 +1,56 @@
+<h1>Task List</h1>
+
+{% for task in tasks %}
+  <div>
+    <h2>{{ task.name }}</h2>
+
+    <p>Type: {{ task.task_type }}</p>
+    <p>Priority: {{ task.get_priority_display }}</p>
+    <p>Deadline: {{ task.deadline }}</p>
+
+    {% if task.is_completed %}
+      <p>Status: Completed</p>
+    {% else %}
+      <p>Status: Active</p>
+    {% endif %}
+
+    <p>Assignees:</p>
+
+    <ul>
+      {% for worker in task.assignees.all %}
+        <li>{{ worker.username }}</li>
+      {% empty %}
+        <li>No assignees assigned</li>
+      {% endfor %}
+    </ul>
+  </div>
+{% empty %}
+  <p>No tasks found.</p>
+{% endfor %}
+
+{% if is_paginated %}
+  <nav>
+    <ul>
+      {% if page_obj.has_previous %}
+        <li>
+          <a href="?page={{ page_obj.previous_page_number }}">
+            Previous
+          </a>
+        </li>
+      {% endif %}
+
+      <li>
+        Page {{ page_obj.number }}
+        of {{ page_obj.paginator.num_pages }}
+      </li>
+
+      {% if page_obj.has_next %}
+        <li>
+          <a href="?page={{ page_obj.next_page_number }}">
+            Next
+          </a>
+        </li>
+      {% endif %}
+    </ul>
+  </nav>
+{% endif %}
