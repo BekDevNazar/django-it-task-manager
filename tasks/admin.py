@@ -1,3 +1,12 @@
 from django.contrib import admin
+from django.contrib.auth.admin import UserAdmin
+from django.contrib.auth.models import Group
 
-# Register your models here.
+from tasks.models import Task, Worker, Position, TaskType
+
+admin.site.register(Task)
+admin.site.register(Worker, UserAdmin)
+admin.site.register(Position)
+admin.site.register(TaskType)
+
+admin.site.unregister(Group)
