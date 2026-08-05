@@ -9,3 +9,10 @@ class TaskListView(generic.ListView):
     context_object_name = "tasks"
     template_name = "tasks/task_list.html"
     paginate_by = 5
+
+
+class TaskDetailView(generic.DetailView):
+    model = Task
+    template_name = "tasks/task_detail.html"
+    context_object_name = "task"
+

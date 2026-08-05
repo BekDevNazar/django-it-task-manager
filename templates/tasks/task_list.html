@@ -1,8 +1,11 @@
+{% extends "base.html" %}
+
+{% block content %}
 <h1>Task List</h1>
 
 {% for task in tasks %}
   <div>
-    <h2>{{ task.name }}</h2>
+    <h2><a href="{% url 'tasks:task-detail' task.id %}">{{ task.name }}</a></h2>
 
     <p>Type: {{ task.task_type }}</p>
     <p>Priority: {{ task.get_priority_display }}</p>
@@ -54,3 +57,5 @@
     </ul>
   </nav>
 {% endif %}
+
+{% endblock %}
