@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% block title %}
+  {{ object|yesno:"Update,Create" }} task
+{% endblock %}
+
+{% block content %}
+  <h1>{{ object|yesno:"Update,Create" }} task</h1>
+
+  <form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+
+    <input type="submit" value="Save">
+    <a href="{% url 'tasks:task-list' %}">Cancel</a>
+  </form>
+{% endblock %}
