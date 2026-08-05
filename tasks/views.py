@@ -1,6 +1,7 @@
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse_lazy
 from django.views import generic
+from django.views.decorators.http import require_POST
 
 from tasks.forms import TaskForm
 from tasks.models import Task
@@ -36,3 +37,13 @@ class TaskDeleteView(generic.DeleteView):
     model = Task
     template_name = "tasks/task_confirm_delete.html"
     success_url = reverse_lazy("tasks:task-list")
+
+
+@require_POST
+def toggle_task_status(request, pk):
+    task = get_object_or_404(Task, pk=pk)
+
+    task.is_completed = not task.is_completed
+    task.save(update_fields=["is_completed"])
+
+    return redirect("tasks:task-detail", pk=task.pk)

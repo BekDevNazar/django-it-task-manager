@@ -31,4 +31,16 @@
   </h3>
   <a href="{% url 'tasks:task-update' task.id %}">Update task</a>
   <a href="{% url 'tasks:task-delete' task.id %}">Delete task</a>
+  <form
+  method="post"
+  action="{% url 'tasks:task-toggle-status' task.pk %}"
+>
+  {% csrf_token %}
+
+  {% if task.is_completed %}
+    <button type="submit">Reopen task</button>
+  {% else %}
+    <button type="submit">Mark as completed</button>
+  {% endif %}
+</form>
 {% endblock %}
