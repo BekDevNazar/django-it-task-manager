@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+
+{% block title %}
+  {{ worker.username }}
+{% endblock %}
+
+{% block content %}
+  <h1>{{ worker.username }}</h1>
+
+  <p>First name: {{ worker.first_name|default:"Not specified" }}</p>
+  <p>Last name: {{ worker.last_name|default:"Not specified" }}</p>
+  <p>Email: {{ worker.email|default:"Not specified" }}</p>
+  <p>Position: {{ worker.position|default:"Not specified" }}</p>
+
+  <h2>Assigned tasks</h2>
+
+  <ul>
+    {% for task in worker.tasks.all %}
+      <li>
+        <a href="{% url 'tasks:task-detail' task.pk %}">
+          {{ task.name }}
+        </a>
+
+        <p>Priority: {{ task.get_priority_display }}</p>
+        <p>Deadline: {{ task.deadline }}</p>
+
+        {% if task.is_completed %}
+          <p>Status: Completed</p>
+        {% else %}
+          <p>Status: Active</p>
+        {% endif %}
+      </li>
+    {% empty %}
+      <li>No assigned tasks.</li>
+    {% endfor %}
+  </ul>
+
+  <a href="{% url 'workers:worker-list' %}">
+    Back to worker list
+  </a>
+{% endblock %}

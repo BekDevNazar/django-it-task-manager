@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+
+{% block title %}
+  Worker list
+{% endblock %}
+
+{% block content %}
+  <h1>Worker list</h1>
+
+  {% for worker in workers %}
+    <div>
+      <p>Username: {{ worker.username }}</p>
+      <p>First name: {{ worker.first_name|default:"Not specified" }}</p>
+      <p>Last name: {{ worker.last_name|default:"Not specified" }}</p>
+      <p>Position: {{ worker.position|default:"Not specified" }}</p>
+      <p>Count of tasks: {{ worker.task_count }}</p>
+
+      <a href="{% url 'workers:worker-detail' worker.pk %}">
+        Detail information
+      </a>
+    </div>
+  {% empty %}
+    <p>No workers found.</p>
+  {% endfor %}
+{% endblock %}
