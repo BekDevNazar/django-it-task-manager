@@ -4,7 +4,11 @@
       <li>
         User: {{ user.get_username }}
       </li>
-
+      <li>
+        <a href="{% url 'dashboard' %}">
+          Dashboard
+        </a>
+      </li>
       <li>
         <a href="{% url 'tasks:task-list' %}">
           Tasks

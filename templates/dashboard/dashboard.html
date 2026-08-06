@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+
+{% block title %}
+  Dashboard
+{% endblock %}
+
+{% block content %}
+  <h1>Dashboard</h1>
+
+  <section>
+    <h2>Statistics</h2>
+
+    <p>Total tasks: {{ total_tasks }}</p>
+    <p>Completed tasks: {{ completed_tasks }}</p>
+    <p>Active tasks: {{ active_tasks }}</p>
+    <p>Overdue tasks: {{ overdue_tasks }}</p>
+    <p>Total workers: {{ total_workers }}</p>
+  </section>
+
+  <section>
+    <h2>Upcoming tasks</h2>
+
+    <ul>
+      {% for task in upcoming_tasks %}
+        <li>
+          <h3>
+            <a href="{% url 'tasks:task-detail' task.id %}">
+              {{ task.name }}
+            </a>
+          </h3>
+
+          <p>Priority: {{ task.get_priority_display }}</p>
+          <p>Task type: {{ task.task_type }}</p>
+          <p>Deadline: {{ task.deadline }}</p>
+        </li>
+      {% empty %}
+        <li>No upcoming tasks.</li>
+      {% endfor %}
+    </ul>
+
+    <a href="{% url 'tasks:task-list' %}">
+      View all tasks
+    </a>
+  </section>
+{% endblock %}

@@ -19,9 +19,12 @@ from xml.etree.ElementInclude import include
 from django.contrib import admin
 from django.urls import path, include
 
+from tasks.dashboard_views import DashboardView
+
 urlpatterns = [
     path('admin/', admin.site.urls),
     path("tasks/", include("tasks.urls")),
     path("accounts/", include("django.contrib.auth.urls")),
     path("workers/", include("tasks.worker_urls")),
+    path("", DashboardView.as_view(), name="dashboard"),
 ]
