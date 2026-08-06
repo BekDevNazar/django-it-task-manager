@@ -9,7 +9,20 @@ class TaskAdmin(admin.ModelAdmin):
     list_display = ["name", "deadline", "is_completed"]
 
 
-admin.site.register(Worker, UserAdmin)
+@admin.register(Worker)
+class WorkerAdmin(UserAdmin):
+    fieldsets = UserAdmin.fieldsets + (("Additional information",{"fields": ("position",),},),)
+
+    add_fieldsets = UserAdmin.add_fieldsets + (("Additional information",{"fields": ("position",),},),)
+    list_display = (
+        "username",
+        "email",
+        "first_name",
+        "last_name",
+        "position",
+        "is_staff",
+    )
+
 admin.site.register(Position)
 admin.site.register(TaskType)
 

@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+
+{% block title %}
+  Task types
+{% endblock %}
+
+{% block content %}
+  <h1>Task types</h1>
+
+  <p>
+    <a href="{% url 'references:task-type-create' %}">
+      Create task type
+    </a>
+  </p>
+
+  <ul>
+    {% for task_type in task_types %}
+      <li>
+        <h3>{{ task_type.name }}</h3>
+
+        <p>Count of tasks: {{ task_type.task_count }}</p>
+
+        <a href="{% url 'references:task-type-update' task_type.id %}">
+          Update
+        </a>
+
+        <a href="{% url 'references:task-type-delete' task_type.id %}">
+          Delete
+        </a>
+      </li>
+    {% empty %}
+      <li>No task types found.</li>
+    {% endfor %}
+  </ul>
+{% endblock %}

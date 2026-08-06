@@ -1,6 +1,6 @@
 from django import forms
 
-from tasks.models import Task
+from tasks.models import Task, TaskType, Position
 
 
 class TaskForm(forms.ModelForm):
@@ -21,3 +21,15 @@ class TaskForm(forms.ModelForm):
                 format="%Y-%m-%dT%H:%M",
             ),
         }
+
+
+class TaskTypeForm(forms.ModelForm):
+    class Meta:
+        model = TaskType
+        fields = ["name"]
+
+
+class PositionForm(forms.ModelForm):
+    class Meta:
+        model = Position
+        fields = ["name"]

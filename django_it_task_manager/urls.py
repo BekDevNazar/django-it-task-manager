@@ -27,4 +27,5 @@ urlpatterns = [
     path("accounts/", include("django.contrib.auth.urls")),
     path("workers/", include("tasks.worker_urls")),
     path("", DashboardView.as_view(), name="dashboard"),
+    path("", include("tasks.reference_urls")),
 ]

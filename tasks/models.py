@@ -10,12 +10,18 @@ class TaskType(models.Model):
     def __str__(self):
         return self.name
 
+    def get_absolute_url(self):
+        return reverse("references:task-type-list")
+
 
 class Position(models.Model):
     name = models.CharField(max_length=100, unique=True)
 
     def __str__(self):
         return self.name
+
+    def get_absolute_url(self):
+        return reverse("references:position-list")
 
 
 class Worker(AbstractUser):
@@ -51,7 +57,7 @@ class Task(models.Model):
 
     task_type = models.ForeignKey(
         TaskType,
-        on_delete=models.CASCADE,
+        on_delete=models.PROTECT,
         related_name="tasks",
     )
 
