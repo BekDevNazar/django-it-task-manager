@@ -1,3 +1,5 @@
+{% load query_transform %}
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -16,44 +18,49 @@
 
 <body>
   {% if messages %}
-  <ul>
-    {% for message in messages %}
-      <li>{{ message }}</li>
-    {% endfor %}
-  </ul>
-{% endif %}
+    <ul>
+      {% for message in messages %}
+        <li>
+          {{ message }}
+        </li>
+      {% endfor %}
+    </ul>
+  {% endif %}
+
   {% block sidebar %}
     {% include "includes/sidebar.html" %}
   {% endblock %}
+
   <main>
     {% block content %}
     {% endblock %}
+
+    {% if is_paginated %}
+      <nav aria-label="Pagination">
+        <ul>
+          {% if page_obj.has_previous %}
+            <li>
+              <a href="?{% query_transform request page=page_obj.previous_page_number %}">
+                Previous
+              </a>
+            </li>
+          {% endif %}
+
+          <li>
+            Page {{ page_obj.number }}
+            of {{ page_obj.paginator.num_pages }}
+          </li>
+
+          {% if page_obj.has_next %}
+            <li>
+              <a href="?{% query_transform request page=page_obj.next_page_number %}">
+                Next
+              </a>
+            </li>
+          {% endif %}
+        </ul>
+      </nav>
+    {% endif %}
   </main>
-  {% if is_paginated %}
-  <nav>
-    <ul>
-      {% if page_obj.has_previous %}
-        <li>
-          <a href="?page={{ page_obj.previous_page_number }}">
-            Previous
-          </a>
-        </li>
-      {% endif %}
-
-      <li>
-        Page {{ page_obj.number }}
-        of {{ page_obj.paginator.num_pages }}
-      </li>
-
-      {% if page_obj.has_next %}
-        <li>
-          <a href="?page={{ page_obj.next_page_number }}">
-            Next
-          </a>
-        </li>
-      {% endif %}
-    </ul>
-  </nav>
-{% endif %}
 </body>
 </html>

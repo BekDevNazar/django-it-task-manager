@@ -2,7 +2,17 @@
 
 {% block content %}
 <h1>Task List</h1>
+<form method="get">
+  {{ search_form.as_p }}
 
+  <button type="submit">
+    Search
+  </button>
+
+  <a href="{% url 'tasks:task-list' %}">
+    Reset
+  </a>
+</form>
 {% for task in tasks %}
   <div>
     <h2><a href="{% url 'tasks:task-detail' task.id %}">{{ task.name }}</a></h2>

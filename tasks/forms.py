@@ -33,3 +33,31 @@ class PositionForm(forms.ModelForm):
     class Meta:
         model = Position
         fields = ["name"]
+
+
+class TaskSearchForm(forms.Form):
+    name = forms.CharField(
+        max_length=100,
+        required=False,
+    )
+    description = forms.CharField(
+        required=False,
+    )
+    priorities = forms.MultipleChoiceField(
+        required=False,
+        choices=Task.Priority.choices,
+        widget=forms.CheckboxSelectMultiple,
+    )
+    statuses = forms.MultipleChoiceField(
+        required=False,
+        choices=[
+            ("active", "Active"),
+            ("completed", "Completed"),
+        ],
+        widget=forms.CheckboxSelectMultiple,
+    )
+    task_types = forms.ModelMultipleChoiceField(
+        queryset=TaskType.objects.all(),
+        required=False,
+        widget=forms.CheckboxSelectMultiple,
+    )
