@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+
+{% block title %}
+  My tasks
+{% endblock %}
+
+{% block content %}
+  <h1>My tasks</h1>
+
+  <ul>
+    {% for task in tasks %}
+      <li>
+        <h3>
+          <a href="{% url 'tasks:task-detail' task.id %}">
+            {{ task.name }}
+          </a>
+        </h3>
+
+        <p>Task type: {{ task.task_type }}</p>
+        <p>Priority: {{ task.get_priority_display }}</p>
+        <p>Deadline: {{ task.deadline }}</p>
+
+        {% if task.is_completed %}
+          <p>Status: Completed</p>
+        {% else %}
+          <p>Status: Active</p>
+        {% endif %}
+      </li>
+    {% empty %}
+      <li>You have no assigned tasks.</li>
+    {% endfor %}
+  </ul>
+
+  <a href="{% url 'tasks:task-list' %}">
+    View all tasks
+  </a>
+{% endblock %}
