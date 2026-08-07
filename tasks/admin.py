@@ -1,6 +1,5 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
-from django.contrib.auth.models import Group
 
 from tasks.models import Task, Worker, Position, TaskType
 
@@ -26,4 +25,3 @@ class WorkerAdmin(UserAdmin):
 admin.site.register(Position)
 admin.site.register(TaskType)
 
-admin.site.unregister(Group)

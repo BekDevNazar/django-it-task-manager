@@ -40,5 +40,9 @@
 {% empty %}
   <p>No tasks found.</p>
 {% endfor %}
-  <a href="{% url 'tasks:task-create' %}">Create task</a>
+  {% if perms.tasks.add_task %}
+    <p>
+      <a href="{% url 'tasks:task-create' %}">Create task</a>
+    </p>
+  {% endif %}
 {% endblock %}

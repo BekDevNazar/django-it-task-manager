@@ -7,32 +7,30 @@
 {% block content %}
   <h1>Positions</h1>
 
-  <p>
+  {% if perms.tasks.add_position %}
     <a href="{% url 'references:position-create' %}">
-      Create position
+      Create
     </a>
-  </p>
+  {% endif %}
 
-  <ul>
-    {% for position in positions %}
-      <li>
-        <h3>{{ position.name }}</h3>
+  {% for position in positions %}
+    <div>
+      <p>{{ position.name }}</p>
+      <p>Workers: {{ position.worker_count }}</p>
 
-        <p>Count of workers: {{ position.worker_count }}</p>
-
+      {% if perms.tasks.change_position %}
         <a href="{% url 'references:position-update' position.id %}">
           Update
         </a>
+      {% endif %}
 
+      {% if perms.tasks.delete_position %}
         <a href="{% url 'references:position-delete' position.id %}">
           Delete
         </a>
-      </li>
-    {% empty %}
-      <li>No positions found.</li>
-    {% endfor %}
-  </ul>
-  <a href="{% url 'references:position-create' %}">
-    Create position
-  </a>
+      {% endif %}
+    </div>
+  {% empty %}
+    <p>No positions found.</p>
+  {% endfor %}
 {% endblock %}

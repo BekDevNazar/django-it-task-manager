@@ -1,9 +1,10 @@
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.shortcuts import get_object_or_404, redirect
 from django.urls import reverse_lazy
 from django.views import generic
 from django.views.decorators.http import require_POST
+from django.core.exceptions import PermissionDenied
 
 from tasks.forms import TaskForm, TaskSearchForm
 from tasks.models import Task
@@ -55,30 +56,50 @@ class TaskDetailView(LoginRequiredMixin, generic.DetailView):
     template_name = "tasks/task_detail.html"
     context_object_name = "task"
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
 
-class TaskCreateView(LoginRequiredMixin, generic.CreateView):
+        context["can_toggle_status"] = (
+            self.object.assignees.filter(id=self.request.user.id).exists() or
+            self.request.user.has_perm("tasks.change_task")
+        )
+        return context
+
+
+class TaskCreateView(LoginRequiredMixin, PermissionRequiredMixin, generic.CreateView):
     model = Task
     form_class = TaskForm
     template_name = "tasks/task_form.html"
     success_url = reverse_lazy("tasks:task-list")
+    permission_required = "tasks.add_task"
+    raise_exception = True
 
 
-class TaskUpdateView(LoginRequiredMixin, generic.UpdateView):
+class TaskUpdateView(LoginRequiredMixin, PermissionRequiredMixin, generic.UpdateView):
     model = Task
     form_class = TaskForm
     template_name = "tasks/task_form.html"
 
+    permission_required = "tasks.change_task"
+    raise_exception = True
 
-class TaskDeleteView(LoginRequiredMixin, generic.DeleteView):
+
+class TaskDeleteView(LoginRequiredMixin, PermissionRequiredMixin, generic.DeleteView):
     model = Task
     template_name = "tasks/task_confirm_delete.html"
     success_url = reverse_lazy("tasks:task-list")
+
+    permission_required = "tasks.delete_task"
+    raise_exception = True
 
 
 @login_required
 @require_POST
 def toggle_task_status(request, pk):
     task = get_object_or_404(Task, pk=pk)
+    is_assignee = task.assignees.filter(id=request.user.id).exists()
+    if not is_assignee and not request.user.has_perm("tasks.change_task"):
+        raise PermissionDenied
 
     task.is_completed = not task.is_completed
     task.save(update_fields=["is_completed"])

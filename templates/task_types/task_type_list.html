@@ -7,29 +7,30 @@
 {% block content %}
   <h1>Task types</h1>
 
-  <p>
+  {% if perms.tasks.add_tasktype %}
     <a href="{% url 'references:task-type-create' %}">
-      Create task type
+      Create
     </a>
-  </p>
+  {% endif %}
 
-  <ul>
-    {% for task_type in task_types %}
-      <li>
-        <h3>{{ task_type.name }}</h3>
+  {% for task_type in task_types %}
+    <div>
+      <p>{{ task_type.name }}</p>
+      <p>Tasks: {{ task_type.task_count }}</p>
 
-        <p>Count of tasks: {{ task_type.task_count }}</p>
-
+      {% if perms.tasks.change_tasktype %}
         <a href="{% url 'references:task-type-update' task_type.id %}">
           Update
         </a>
+      {% endif %}
 
+      {% if perms.tasks.delete_tasktype %}
         <a href="{% url 'references:task-type-delete' task_type.id %}">
           Delete
         </a>
-      </li>
-    {% empty %}
-      <li>No task types found.</li>
-    {% endfor %}
-  </ul>
+      {% endif %}
+    </div>
+  {% empty %}
+    <p>No task types found.</p>
+  {% endfor %}
 {% endblock %}

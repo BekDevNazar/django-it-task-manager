@@ -29,18 +29,28 @@
       Back to task list
     </a>
   </h3>
-  <a href="{% url 'tasks:task-update' task.id %}">Update task</a>
-  <a href="{% url 'tasks:task-delete' task.id %}">Delete task</a>
-  <form
-  method="post"
-  action="{% url 'tasks:task-toggle-status' task.pk %}"
->
-  {% csrf_token %}
-
-  {% if task.is_completed %}
-    <button type="submit">Reopen task</button>
-  {% else %}
-    <button type="submit">Mark as completed</button>
+   {% if perms.tasks.change_task %}
+    <a href="{% url 'tasks:task-update' task.id %}">
+      Update
+    </a>
   {% endif %}
-</form>
+
+  {% if perms.tasks.delete_task %}
+    <a href="{% url 'tasks:task-delete' task.id %}">
+      Delete
+    </a>
+  {% endif %}
+  {% if can_toggle_status %}
+    <form method="post" action="{% url 'tasks:task-toggle-status' task.id %}">
+      {% csrf_token %}
+
+      <button type="submit">
+        {% if task.is_completed %}
+          Mark as active
+        {% else %}
+          Mark as completed
+        {% endif %}
+      </button>
+    </form>
+  {% endif %}
 {% endblock %}
