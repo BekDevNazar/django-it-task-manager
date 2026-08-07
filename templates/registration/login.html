@@ -4,23 +4,79 @@
   Login
 {% endblock %}
 
+{% block sidebar %}
+{% endblock %}
+
 {% block content %}
 
-  {% if form.errors %}
-    <p>Your username and password didn't match. Please try again.</p>
-  {% endif %}
+<div class="d-flex justify-content-center py-6">
+
+  <div class="container-tight">
+
+    <div class="text-center mb-4">
+      <h1>
+        IT Task Manager
+      </h1>
+    </div>
 
 
-  {% if next %}
-    <p>Please login to see this page.</p>
-  {% endif %}
+    <div class="card card-md">
 
-  <form method="post" action="{% url 'login' %}">
-    {% csrf_token %}
-    {{ form.as_p }}
+      <div class="card-body">
 
-    <input type="submit" value="Login">
-    <input type="hidden" name="next" value="{{ next }}">
-  </form>
+        <h2 class="h2 text-center mb-4">
+          Login to your account
+        </h2>
+
+
+        {% if form.errors %}
+          <div class="alert alert-danger" role="alert">
+            Your username and password didn't match.
+            Please try again.
+          </div>
+        {% endif %}
+
+
+        {% if next %}
+          <div class="alert alert-info" role="alert">
+            Please login to see this page.
+          </div>
+        {% endif %}
+
+
+        <form
+            method="post"
+            action="{% url 'login' %}"
+        >
+          {% csrf_token %}
+
+          {{ form.as_p }}
+
+          <input
+              type="hidden"
+              name="next"
+              value="{{ next }}"
+          >
+
+          <div class="form-footer">
+
+            <button
+                type="submit"
+                class="btn btn-primary w-100"
+            >
+              Sign in
+            </button>
+
+          </div>
+
+        </form>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</div>
 
 {% endblock %}

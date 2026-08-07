@@ -1,48 +1,172 @@
 {% extends "base.html" %}
 
+{% block title %}
+  Tasks
+{% endblock %}
+
 {% block content %}
-<h1>Task List</h1>
-<form method="get">
-  {{ search_form.as_p }}
 
-  <button type="submit">
-    Search
-  </button>
+<div class="page-header d-print-none mb-4">
+  <div class="row g-2 align-items-center">
 
-  <a href="{% url 'tasks:task-list' %}">
-    Reset
-  </a>
-</form>
-{% for task in tasks %}
-  <div>
-    <h2><a href="{% url 'tasks:task-detail' task.id %}">{{ task.name }}</a></h2>
+    <div class="col">
+      <h2 class="page-title">
+        Tasks
+      </h2>
+    </div>
 
-    <p>Type: {{ task.task_type }}</p>
-    <p>Priority: {{ task.get_priority_display }}</p>
-    <p>Deadline: {{ task.deadline }}</p>
-
-    {% if task.is_completed %}
-      <p>Status: Completed</p>
-    {% else %}
-      <p>Status: Active</p>
+    {% if perms.tasks.add_task %}
+      <div class="col-auto ms-auto d-print-none">
+        <a
+            href="{% url 'tasks:task-create' %}"
+            class="btn btn-primary"
+        >
+          Create task
+        </a>
+      </div>
     {% endif %}
 
-    <p>Assignees:</p>
-
-    <ul>
-      {% for worker in task.assignees.all %}
-        <li>{{ worker.username }}</li>
-      {% empty %}
-        <li>No assignees assigned</li>
-      {% endfor %}
-    </ul>
   </div>
-{% empty %}
-  <p>No tasks found.</p>
-{% endfor %}
-  {% if perms.tasks.add_task %}
-    <p>
-      <a href="{% url 'tasks:task-create' %}">Create task</a>
-    </p>
-  {% endif %}
+</div>
+
+
+<div class="card mb-4">
+
+  <div class="card-header">
+    <h3 class="card-title">
+      Search and filters
+    </h3>
+  </div>
+
+  <div class="card-body">
+
+    <form method="get">
+
+      {{ search_form.as_p }}
+
+      <button
+          type="submit"
+          class="btn btn-primary"
+      >
+        Search
+      </button>
+
+      <a
+          href="{% url 'tasks:task-list' %}"
+          class="btn btn-outline-secondary"
+      >
+        Reset
+      </a>
+
+    </form>
+
+  </div>
+
+</div>
+
+
+<div class="row row-cards">
+
+  {% for task in tasks %}
+
+    <div class="col-12 col-md-6 col-lg-4">
+
+      <div class="card card-sm">
+
+        {% if task.priority == "low" %}
+          <div class="card-status-top bg-green"></div>
+
+        {% elif task.priority == "medium" %}
+          <div class="card-status-top bg-blue"></div>
+
+        {% elif task.priority == "high" %}
+          <div class="card-status-top bg-orange"></div>
+
+        {% elif task.priority == "urgent" %}
+          <div class="card-status-top bg-red"></div>
+        {% endif %}
+
+
+        <div class="card-body">
+
+          <h3 class="card-title">
+            <a
+                href="{% url 'tasks:task-detail' task.id %}"
+                class="text-reset"
+            >
+              {{ task.name }}
+            </a>
+          </h3>
+
+
+          <div class="text-secondary mb-3">
+            {{ task.task_type }}
+          </div>
+
+
+          <div class="mb-2">
+            <strong>Priority:</strong>
+            {{ task.get_priority_display }}
+          </div>
+
+
+          <div class="mb-2">
+            <strong>Deadline:</strong>
+            {{ task.deadline }}
+          </div>
+
+
+          <div class="mb-3">
+
+            {% if task.is_completed %}
+              <span class="badge bg-green-lt">
+                Completed
+              </span>
+            {% else %}
+              <span class="badge bg-blue-lt">
+                Active
+              </span>
+            {% endif %}
+
+          </div>
+
+
+          <div>
+            <strong>Assignees:</strong>
+          </div>
+
+          <div class="mt-2">
+
+            {% for worker in task.assignees.all %}
+              <span class="badge bg-secondary-lt me-1">
+                {{ worker.username }}
+              </span>
+            {% empty %}
+              <span class="text-secondary">
+                No assignees assigned
+              </span>
+            {% endfor %}
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  {% empty %}
+
+    <div class="col-12">
+      <div class="card">
+        <div class="card-body text-center text-secondary">
+          No tasks found.
+        </div>
+      </div>
+    </div>
+
+  {% endfor %}
+
+</div>
+
 {% endblock %}

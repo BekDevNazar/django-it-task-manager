@@ -1,25 +1,100 @@
 {% extends "base.html" %}
 
 {% block title %}
-  Worker list
+  Workers
 {% endblock %}
 
 {% block content %}
-  <h1>Worker list</h1>
 
-  {% for worker in workers %}
-    <div>
-      <p>Username: {{ worker.username }}</p>
-      <p>First name: {{ worker.first_name|default:"Not specified" }}</p>
-      <p>Last name: {{ worker.last_name|default:"Not specified" }}</p>
-      <p>Position: {{ worker.position|default:"Not specified" }}</p>
-      <p>Count of tasks: {{ worker.task_count }}</p>
+<div class="page-header d-print-none mb-4">
+  <div class="row align-items-center">
+    <div class="col">
+      <div class="page-pretitle">
+        Team
+      </div>
 
-      <a href="{% url 'workers:worker-detail' worker.pk %}">
-        Detail information
-      </a>
+      <h2 class="page-title">
+        Workers
+      </h2>
     </div>
-  {% empty %}
-    <p>No workers found.</p>
-  {% endfor %}
+  </div>
+</div>
+
+
+<div class="card">
+
+  <div class="table-responsive">
+
+    <table class="table table-vcenter card-table">
+
+      <thead>
+        <tr>
+          <th>Username</th>
+          <th>First name</th>
+          <th>Last name</th>
+          <th>Position</th>
+          <th>Tasks</th>
+          <th></th>
+        </tr>
+      </thead>
+
+      <tbody>
+
+        {% for worker in workers %}
+          <tr>
+
+            <td>
+              <strong>
+                {{ worker.username }}
+              </strong>
+            </td>
+
+            <td>
+              {{ worker.first_name|default:"Not specified" }}
+            </td>
+
+            <td>
+              {{ worker.last_name|default:"Not specified" }}
+            </td>
+
+            <td>
+              {{ worker.position|default:"Not specified" }}
+            </td>
+
+            <td>
+              <span class="badge bg-blue-lt">
+                {{ worker.task_count }}
+              </span>
+            </td>
+
+            <td class="text-end">
+              <a
+                  href="{% url 'workers:worker-detail' worker.id %}"
+                  class="btn btn-outline-primary btn-sm"
+              >
+                Details
+              </a>
+            </td>
+
+          </tr>
+
+        {% empty %}
+          <tr>
+            <td
+                colspan="6"
+                class="text-center text-secondary"
+            >
+              No workers found.
+            </td>
+          </tr>
+        {% endfor %}
+
+      </tbody>
+
+    </table>
+
+  </div>
+
+</div>
+
 {% endblock %}

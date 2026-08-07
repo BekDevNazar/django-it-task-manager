@@ -1,7 +1,50 @@
-{% extends 'base.html' %}
+{% extends "base.html" %}
+
+{% block title %}
+  Logged out
+{% endblock %}
+
+{% block sidebar %}
+{% endblock %}
 
 {% block content %}
-  <p>Logged out!</p>
 
-  <a href="{% url 'login'%}">Click here to login again.</a>
+<div class="d-flex justify-content-center py-6">
+
+  <div class="container-tight">
+
+    <div class="text-center mb-4">
+      <h1>
+        IT Task Manager
+      </h1>
+    </div>
+
+
+    <div class="card card-md">
+
+      <div class="card-body text-center">
+
+        <h2 class="h2 mb-3">
+          Logged out
+        </h2>
+
+        <p class="text-secondary mb-4">
+          You have successfully logged out.
+        </p>
+
+        <a
+            href="{% url 'login' %}"
+            class="btn btn-primary w-100"
+        >
+          Login again
+        </a>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</div>
+
 {% endblock %}

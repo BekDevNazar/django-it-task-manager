@@ -1,56 +1,224 @@
 {% extends "base.html" %}
 
+{% block title %}
+  {{ task.name }}
+{% endblock %}
+
 {% block content %}
-  <h1>{{ task.name }}</h1>
 
-  <p>Full description: {{ task.description }}</p>
-  <p>Type: {{ task.task_type }}</p>
-  <p>Priority: {{ task.get_priority_display }}</p>
-  <p>Deadline: {{ task.deadline }}</p>
+  <div class="page-header d-print-none mb-4">
+    <div class="row g-2 align-items-center">
 
-  {% if task.is_completed %}
-    <p>Status: Completed</p>
-  {% else %}
-    <p>Status: Active</p>
-  {% endif %}
+      <div class="col">
+        <div class="page-pretitle">
+          Task
+        </div>
 
-  <p>Assignees:</p>
+        <h2 class="page-title">
+          {{ task.name }}
+        </h2>
+      </div>
 
-  <ul>
-    {% for worker in task.assignees.all %}
-      <li>{{ worker.username }}</li>
-    {% empty %}
-      <li>No assignees assigned</li>
-    {% endfor %}
-  </ul>
 
-  <h3>
-    <a href="{% url 'tasks:task-list' %}">
-      Back to task list
-    </a>
-  </h3>
-   {% if perms.tasks.change_task %}
-    <a href="{% url 'tasks:task-update' task.id %}">
-      Update
-    </a>
-  {% endif %}
+      <div class="col-auto ms-auto d-print-none">
+        <div class="btn-list">
 
-  {% if perms.tasks.delete_task %}
-    <a href="{% url 'tasks:task-delete' task.id %}">
-      Delete
-    </a>
-  {% endif %}
-  {% if can_toggle_status %}
-    <form method="post" action="{% url 'tasks:task-toggle-status' task.id %}">
-      {% csrf_token %}
+          <a
+              href="{% url 'tasks:task-list' %}"
+              class="btn btn-outline-secondary"
+          >
+            Back
+          </a>
 
-      <button type="submit">
-        {% if task.is_completed %}
-          Mark as active
-        {% else %}
-          Mark as completed
-        {% endif %}
-      </button>
-    </form>
-  {% endif %}
+
+          {% if perms.tasks.change_task %}
+            <a
+                href="{% url 'tasks:task-update' task.id %}"
+                class="btn btn-primary"
+            >
+              Update
+            </a>
+          {% endif %}
+
+
+          {% if perms.tasks.delete_task %}
+            <a
+                href="{% url 'tasks:task-delete' task.id %}"
+                class="btn btn-danger"
+            >
+              Delete
+            </a>
+          {% endif %}
+
+
+          {% if can_toggle_status %}
+            <form
+                method="post"
+                action="{% url 'tasks:task-toggle-status' task.id %}"
+                class="d-inline"
+            >
+              {% csrf_token %}
+
+              <button
+                  type="submit"
+                  class="btn btn-outline-primary"
+              >
+                {% if task.is_completed %}
+                  Mark as active
+                {% else %}
+                  Mark as completed
+                {% endif %}
+              </button>
+            </form>
+          {% endif %}
+
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+
+  <div class="row g-3">
+
+    <div class="col-lg-8">
+
+      <div class="card">
+        <div class="card-body">
+
+          <h2 class="card-title">
+            Description
+          </h2>
+
+          <div class="text-secondary">
+            {{ task.description|linebreaksbr }}
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+
+
+    <div class="col-lg-4">
+
+      <div class="row row-cards">
+
+        <div class="col-12">
+
+          <div class="card">
+            <div class="card-body">
+
+              <div class="card-title">
+                Basic info
+              </div>
+
+
+              <div class="mb-3">
+                <span class="text-secondary">
+                  Type:
+                </span>
+
+                <strong>
+                  {{ task.task_type }}
+                </strong>
+              </div>
+
+
+              <div class="mb-3">
+                <span class="text-secondary">
+                  Priority:
+                </span>
+
+                {% if task.priority == "low" %}
+                  <span class="badge bg-green-lt">
+                    {{ task.get_priority_display }}
+                  </span>
+
+                {% elif task.priority == "medium" %}
+                  <span class="badge bg-blue-lt">
+                    {{ task.get_priority_display }}
+                  </span>
+
+                {% elif task.priority == "high" %}
+                  <span class="badge bg-orange-lt">
+                    {{ task.get_priority_display }}
+                  </span>
+
+                {% elif task.priority == "urgent" %}
+                  <span class="badge bg-red-lt">
+                    {{ task.get_priority_display }}
+                  </span>
+                {% endif %}
+              </div>
+
+
+              <div class="mb-3">
+                <span class="text-secondary">
+                  Deadline:
+                </span>
+
+                <strong>
+                  {{ task.deadline }}
+                </strong>
+              </div>
+
+
+              <div>
+                <span class="text-secondary">
+                  Status:
+                </span>
+
+                {% if task.is_completed %}
+                  <span class="badge bg-green-lt">
+                    Completed
+                  </span>
+                {% else %}
+                  <span class="badge bg-blue-lt">
+                    Active
+                  </span>
+                {% endif %}
+              </div>
+
+            </div>
+          </div>
+
+        </div>
+
+
+        <div class="col-12">
+
+          <div class="card">
+            <div class="card-body">
+
+              <div class="card-title">
+                Assignees
+              </div>
+
+              <div>
+                {% for worker in task.assignees.all %}
+
+                  <span class="badge bg-secondary-lt me-1 mb-1">
+                    {{ worker.username }}
+                  </span>
+
+                {% empty %}
+
+                  <span class="text-secondary">
+                    No assignees assigned
+                  </span>
+
+                {% endfor %}
+              </div>
+
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+
 {% endblock %}

@@ -5,32 +5,118 @@
 {% endblock %}
 
 {% block content %}
-  <h1>Positions</h1>
 
-  {% if perms.tasks.add_position %}
-    <a href="{% url 'references:position-create' %}">
-      Create
-    </a>
-  {% endif %}
+<div class="page-header d-print-none mb-4">
+  <div class="row g-2 align-items-center">
 
-  {% for position in positions %}
-    <div>
-      <p>{{ position.name }}</p>
-      <p>Workers: {{ position.worker_count }}</p>
+    <div class="col">
+      <div class="page-pretitle">
+        References
+      </div>
 
-      {% if perms.tasks.change_position %}
-        <a href="{% url 'references:position-update' position.id %}">
-          Update
-        </a>
-      {% endif %}
-
-      {% if perms.tasks.delete_position %}
-        <a href="{% url 'references:position-delete' position.id %}">
-          Delete
-        </a>
-      {% endif %}
+      <h2 class="page-title">
+        Positions
+      </h2>
     </div>
-  {% empty %}
-    <p>No positions found.</p>
-  {% endfor %}
+
+
+    {% if perms.tasks.add_position %}
+      <div class="col-auto ms-auto d-print-none">
+        <a
+            href="{% url 'references:position-create' %}"
+            class="btn btn-primary"
+        >
+          Create position
+        </a>
+      </div>
+    {% endif %}
+
+  </div>
+</div>
+
+
+<div class="card">
+
+  <div class="table-responsive">
+
+    <table class="table table-vcenter card-table">
+
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Workers</th>
+          <th></th>
+        </tr>
+      </thead>
+
+      <tbody>
+
+        {% for position in positions %}
+
+          <tr>
+
+            <td>
+              <strong>
+                {{ position.name }}
+              </strong>
+            </td>
+
+
+            <td>
+              <span class="badge bg-blue-lt">
+                {{ position.worker_count }}
+              </span>
+            </td>
+
+
+            <td class="text-end">
+
+              <div class="btn-list justify-content-end">
+
+                {% if perms.tasks.change_position %}
+                  <a
+                      href="{% url 'references:position-update' position.id %}"
+                      class="btn btn-outline-primary btn-sm"
+                  >
+                    Update
+                  </a>
+                {% endif %}
+
+
+                {% if perms.tasks.delete_position %}
+                  <a
+                      href="{% url 'references:position-delete' position.id %}"
+                      class="btn btn-outline-danger btn-sm"
+                  >
+                    Delete
+                  </a>
+                {% endif %}
+
+              </div>
+
+            </td>
+
+          </tr>
+
+        {% empty %}
+
+          <tr>
+            <td
+                colspan="3"
+                class="text-center text-secondary"
+            >
+              No positions found.
+            </td>
+          </tr>
+
+        {% endfor %}
+
+      </tbody>
+
+    </table>
+
+  </div>
+
+</div>
+
 {% endblock %}

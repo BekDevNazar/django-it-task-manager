@@ -5,32 +5,121 @@
 {% endblock %}
 
 {% block content %}
-  <h1>Task types</h1>
 
-  {% if perms.tasks.add_tasktype %}
-    <a href="{% url 'references:task-type-create' %}">
-      Create
-    </a>
-  {% endif %}
+<div class="page-header d-print-none mb-4">
+  <div class="row g-2 align-items-center">
 
-  {% for task_type in task_types %}
-    <div>
-      <p>{{ task_type.name }}</p>
-      <p>Tasks: {{ task_type.task_count }}</p>
+    <div class="col">
+      <div class="page-pretitle">
+        References
+      </div>
 
-      {% if perms.tasks.change_tasktype %}
-        <a href="{% url 'references:task-type-update' task_type.id %}">
-          Update
-        </a>
-      {% endif %}
-
-      {% if perms.tasks.delete_tasktype %}
-        <a href="{% url 'references:task-type-delete' task_type.id %}">
-          Delete
-        </a>
-      {% endif %}
+      <h2 class="page-title">
+        Task types
+      </h2>
     </div>
-  {% empty %}
-    <p>No task types found.</p>
-  {% endfor %}
+
+
+    {% if perms.tasks.add_tasktype %}
+      <div class="col-auto ms-auto d-print-none">
+
+        <a
+            href="{% url 'references:task-type-create' %}"
+            class="btn btn-primary"
+        >
+          Create task type
+        </a>
+
+      </div>
+    {% endif %}
+
+  </div>
+</div>
+
+
+<div class="card">
+
+  <div class="table-responsive">
+
+    <table class="table table-vcenter card-table">
+
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Tasks</th>
+          <th></th>
+        </tr>
+      </thead>
+
+
+      <tbody>
+
+        {% for task_type in task_types %}
+
+          <tr>
+
+            <td>
+              <strong>
+                {{ task_type.name }}
+              </strong>
+            </td>
+
+
+            <td>
+              <span class="badge bg-blue-lt">
+                {{ task_type.task_count }}
+              </span>
+            </td>
+
+
+            <td class="text-end">
+
+              <div class="btn-list justify-content-end">
+
+                {% if perms.tasks.change_tasktype %}
+                  <a
+                      href="{% url 'references:task-type-update' task_type.id %}"
+                      class="btn btn-outline-primary btn-sm"
+                  >
+                    Update
+                  </a>
+                {% endif %}
+
+
+                {% if perms.tasks.delete_tasktype %}
+                  <a
+                      href="{% url 'references:task-type-delete' task_type.id %}"
+                      class="btn btn-outline-danger btn-sm"
+                  >
+                    Delete
+                  </a>
+                {% endif %}
+
+              </div>
+
+            </td>
+
+          </tr>
+
+        {% empty %}
+
+          <tr>
+            <td
+                colspan="3"
+                class="text-center text-secondary"
+            >
+              No task types found.
+            </td>
+          </tr>
+
+        {% endfor %}
+
+      </tbody>
+
+    </table>
+
+  </div>
+
+</div>
+
 {% endblock %}

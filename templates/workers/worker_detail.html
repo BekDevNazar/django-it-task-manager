@@ -5,37 +5,183 @@
 {% endblock %}
 
 {% block content %}
-  <h1>{{ worker.username }}</h1>
 
-  <p>First name: {{ worker.first_name|default:"Not specified" }}</p>
-  <p>Last name: {{ worker.last_name|default:"Not specified" }}</p>
-  <p>Email: {{ worker.email|default:"Not specified" }}</p>
-  <p>Position: {{ worker.position|default:"Not specified" }}</p>
+<div class="page-header d-print-none mb-4">
+  <div class="row g-2 align-items-center">
 
-  <h2>Assigned tasks</h2>
+    <div class="col">
+      <div class="page-pretitle">
+        Worker
+      </div>
 
-  <ul>
-    {% for task in worker.tasks.all %}
-      <li>
-        <a href="{% url 'tasks:task-detail' task.pk %}">
-          {{ task.name }}
-        </a>
+      <h2 class="page-title">
+        {{ worker.username }}
+      </h2>
+    </div>
 
-        <p>Priority: {{ task.get_priority_display }}</p>
-        <p>Deadline: {{ task.deadline }}</p>
+    <div class="col-auto ms-auto d-print-none">
+      <a
+          href="{% url 'workers:worker-list' %}"
+          class="btn btn-outline-secondary"
+      >
+        Back
+      </a>
+    </div>
 
-        {% if task.is_completed %}
-          <p>Status: Completed</p>
-        {% else %}
-          <p>Status: Active</p>
-        {% endif %}
-      </li>
-    {% empty %}
-      <li>No assigned tasks.</li>
-    {% endfor %}
-  </ul>
+  </div>
+</div>
 
-  <a href="{% url 'workers:worker-list' %}">
-    Back to worker list
-  </a>
+
+<div class="row g-3">
+
+  <div class="col-lg-4">
+
+    <div class="card">
+      <div class="card-body">
+
+        <div class="card-title">
+          Basic info
+        </div>
+
+        <div class="mb-3">
+          <span class="text-secondary">
+            First name:
+          </span>
+
+          <strong>
+            {{ worker.first_name|default:"Not specified" }}
+          </strong>
+        </div>
+
+        <div class="mb-3">
+          <span class="text-secondary">
+            Last name:
+          </span>
+
+          <strong>
+            {{ worker.last_name|default:"Not specified" }}
+          </strong>
+        </div>
+
+        <div class="mb-3">
+          <span class="text-secondary">
+            Email:
+          </span>
+
+          <strong>
+            {{ worker.email|default:"Not specified" }}
+          </strong>
+        </div>
+
+        <div>
+          <span class="text-secondary">
+            Position:
+          </span>
+
+          <strong>
+            {{ worker.position|default:"Not specified" }}
+          </strong>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+
+
+  <div class="col-lg-8">
+
+    <div class="card">
+
+      <div class="card-header">
+        <h3 class="card-title">
+          Assigned tasks
+        </h3>
+      </div>
+
+
+      <div class="list-group list-group-flush">
+
+        {% for task in worker.tasks.all %}
+
+          <div class="list-group-item">
+
+            <div class="row align-items-center">
+
+              <div class="col">
+
+                <a
+                    href="{% url 'tasks:task-detail' task.id %}"
+                    class="text-reset fw-bold"
+                >
+                  {{ task.name }}
+                </a>
+
+                <div class="text-secondary mt-1">
+                  Deadline: {{ task.deadline }}
+                </div>
+
+              </div>
+
+
+              <div class="col-auto">
+
+                {% if task.priority == "low" %}
+                  <span class="badge bg-green-lt">
+                    {{ task.get_priority_display }}
+                  </span>
+
+                {% elif task.priority == "medium" %}
+                  <span class="badge bg-blue-lt">
+                    {{ task.get_priority_display }}
+                  </span>
+
+                {% elif task.priority == "high" %}
+                  <span class="badge bg-orange-lt">
+                    {{ task.get_priority_display }}
+                  </span>
+
+                {% elif task.priority == "urgent" %}
+                  <span class="badge bg-red-lt">
+                    {{ task.get_priority_display }}
+                  </span>
+                {% endif %}
+
+              </div>
+
+
+              <div class="col-auto">
+
+                {% if task.is_completed %}
+                  <span class="badge bg-green-lt">
+                    Completed
+                  </span>
+                {% else %}
+                  <span class="badge bg-blue-lt">
+                    Active
+                  </span>
+                {% endif %}
+
+              </div>
+
+            </div>
+
+          </div>
+
+        {% empty %}
+
+          <div class="card-body text-center text-secondary">
+            No assigned tasks.
+          </div>
+
+        {% endfor %}
+
+      </div>
+
+    </div>
+
+  </div>
+
+</div>
+
 {% endblock %}

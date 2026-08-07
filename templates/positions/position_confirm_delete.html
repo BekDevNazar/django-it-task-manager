@@ -5,24 +5,71 @@
 {% endblock %}
 
 {% block content %}
-  <h1>Delete position</h1>
 
-  <p>
-    Are you sure you want to delete
-    <strong>{{ object.name }}</strong>?
-  </p>
+<div class="page-header d-print-none mb-4">
+  <div class="row align-items-center">
+    <div class="col">
+      <div class="page-pretitle">
+        References
+      </div>
 
-  <form method="post">
-    {% csrf_token %}
+      <h2 class="page-title">
+        Delete position
+      </h2>
+    </div>
+  </div>
+</div>
 
-    <button type="submit">
-      Confirm delete
-    </button>
-  </form>
 
-  <p>
-    <a href="{% url 'references:position-list' %}">
-      Cancel
-    </a>
-  </p>
+<div
+    class="modal modal-blur fade position-relative rounded
+           d-block show bg-surface-backdrop py-6 w-auto h-auto"
+>
+
+  <div
+      class="modal-dialog modal-sm modal-dialog-centered"
+      role="document"
+  >
+
+    <form method="post" class="modal-content">
+      {% csrf_token %}
+
+      <div class="modal-body">
+
+        <div class="modal-title">
+          Are you sure?
+        </div>
+
+        <div>
+          Are you sure you want to delete
+          <strong>{{ object.name }}</strong>?
+        </div>
+
+      </div>
+
+
+      <div class="modal-footer">
+
+        <a
+            href="{% url 'references:position-list' %}"
+            class="btn btn-link link-secondary me-auto"
+        >
+          Cancel
+        </a>
+
+        <button
+            type="submit"
+            class="btn btn-danger"
+        >
+          Confirm delete
+        </button>
+
+      </div>
+
+    </form>
+
+  </div>
+
+</div>
+
 {% endblock %}
